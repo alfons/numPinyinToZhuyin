@@ -158,3 +158,5 @@ Just copy the function into your project — no package needed.
 ## License
 
 MIT
+
+Have fun with Pīnyīn! 🚀 Alfons
