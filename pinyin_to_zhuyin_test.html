@@ -260,7 +260,7 @@
 
       testData.forEach(item => {
         const inputWithTone = item.pinyin + '1';
-        const computed = numbersToZhuyin(inputWithTone);
+        const computed = numPinyinToZhuyin(inputWithTone);
         const status = computed === item.expected 
           ? '<span class="match">✓ PASS</span>' 
           : '<span class="fail">✗ FAIL</span>';
@@ -274,14 +274,6 @@
         `;
         tbody.appendChild(row);
       });
-
-      console.log('%c✅ All pinyin.info basic chart tests completed!', 'color: green; font-size: 16px;');
-      console.table(testData.map(item => ({
-        pinyinInput: item.pinyin + '1',
-        expected: item.expected,
-        computed: pinyinToZhuyin(item.pinyin + '1'),
-        pass: pinyinToZhuyin(item.pinyin + '1') === item.expected
-      })));
     }
 
     // Auto-run when page loads
