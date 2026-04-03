@@ -1,12 +1,10 @@
 # numPinyinToZhuyin
 
-A tiny utility for converting numbered **Hànyǔ Pīnyīn** (e.g. `Han4 yu3 Pin1 yin1`) into **Zhuyin / Bopomofo** with tone marks.
+A tiny, performance optimised utility for converting numbered **Hànyǔ Pīnyīn** (e.g. `Han4 yu3 Pin1 yin1`) into **Zhuyin / Bopomofo** with tone marks.
 
 ## Overview
 
-This function takes Pinyin syllables annotated with tone numbers (`1–5`) and outputs the corresponding Zhuyin symbols with proper tone diacritics.
-
-One function, no dependencies, straightforward mapping.
+This function takes space separated, Pinyin syllables annotated with tone numbers (`1–5`) and outputs the corresponding Zhuyin symbols with proper tone diacritics.
 
 ## Example
 
