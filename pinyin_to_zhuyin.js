@@ -1,7 +1,7 @@
 /*
  * Number-marked Pinyin → Zhuyin.
  */
-function numbersToZhuyin(pinyinInput, returnArray = false) {
+function numPinyinToZhuyin(pinyinInput, returnArray = false) {
   if (!pinyinInput) return returnArray ? [] : '';
 
   const syllables = Array.isArray(pinyinInput)
