@@ -47,7 +47,8 @@ function numPinyinToZhuyin(pinyinInput, returnArray = false) {
     let normalized = base
       .replace(/^you/, 'iu').replace(/^yan/, 'ian').replace(/^yin/, 'in')
       .replace(/^yang/, 'iang').replace(/^ying/, 'ing').replace(/^yong/, 'iong')
-      .replace(/^wei/, 'ui').replace(/^wen/, 'un');
+      .replace(/^wei/, 'ui').replace(/^wen/, 'un')
+      .replace(/^wu/, 'u');
 
     if (normalized === 'yi' || normalized.startsWith('yi')) normalized = normalized.replace(/^yi/, 'i');
     else if (normalized.startsWith('y')) {
