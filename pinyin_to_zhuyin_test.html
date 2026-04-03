@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pinyin → Zhuyin Test Suite</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 20px; }
+    table { border-collapse: collapse; width: 100%; max-width: 1200px; }
+    th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; }
+    th { background: #f0f0f0; }
+    .match { color: green; font-weight: bold; }
+    .fail { color: red; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Pinyin → Zhuyin Test</h1>
+  <p>Tests based on the official <strong>basic chart</strong> from <a href="https://pinyin.info/romanization/bopomofo/basic.html" target="_blank">pinyin.info</a>.<br>
+     All tests use tone 1 (no tone mark in Zhuyin) to match the tone-less chart on the site.</p>
+
+  <h2>Test Results</h2>
+  <table id="testTable">
+    <thead>
+      <tr>
+        <th>Pinyin Input (tone 1)</th>
+        <th>Expected Zhuyin (from pinyin.info)</th>
+        <th>Computed Zhuyin</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+        <script src="./pinyin_to_zhuyin.js"></script>
+
+  <script>
+    // ==================== TEST DATA FROM https://pinyin.info/romanization/bopomofo/basic.html ====================
+    const testData = [
+      { pinyin: "ba", expected: "ㄅㄚ" },
+      { pinyin: "bo", expected: "ㄅㄛ" },
+      { pinyin: "bai", expected: "ㄅㄞ" },
+      { pinyin: "bei", expected: "ㄅㄟ" },
+      { pinyin: "bao", expected: "ㄅㄠ" },
+      { pinyin: "ban", expected: "ㄅㄢ" },
+      { pinyin: "ben", expected: "ㄅㄣ" },
+      { pinyin: "bang", expected: "ㄅㄤ" },
+      { pinyin: "beng", expected: "ㄅㄥ" },
+      { pinyin: "bi", expected: "ㄅㄧ" },
+      { pinyin: "bie", expected: "ㄅㄧㄝ" },
+      { pinyin: "biao", expected: "ㄅㄧㄠ" },
+      { pinyin: "bian", expected: "ㄅㄧㄢ" },
+      { pinyin: "bin", expected: "ㄅㄧㄣ" },
+      { pinyin: "bing", expected: "ㄅㄧㄥ" },
+      { pinyin: "bu", expected: "ㄅㄨ" },
+
+      { pinyin: "pa", expected: "ㄆㄚ" },
+      { pinyin: "po", expected: "ㄆㄛ" },
+      { pinyin: "pai", expected: "ㄆㄞ" },
+      { pinyin: "pei", expected: "ㄆㄟ" },
+      { pinyin: "pao", expected: "ㄆㄠ" },
+      { pinyin: "pou", expected: "ㄆㄡ" },
+      { pinyin: "pan", expected: "ㄆㄢ" },
+      { pinyin: "pen", expected: "ㄆㄣ" },
+      { pinyin: "pang", expected: "ㄆㄤ" },
+      { pinyin: "peng", expected: "ㄆㄥ" },
+      { pinyin: "pi", expected: "ㄆㄧ" },
+      { pinyin: "pie", expected: "ㄆㄧㄝ" },
+      { pinyin: "piao", expected: "ㄆㄧㄠ" },
+      { pinyin: "pian", expected: "ㄆㄧㄢ" },
+      { pinyin: "pin", expected: "ㄆㄧㄣ" },
+      { pinyin: "ping", expected: "ㄆㄧㄥ" },
+      { pinyin: "pu", expected: "ㄆㄨ" },
+
+      { pinyin: "ma", expected: "ㄇㄚ" },
+      { pinyin: "mo", expected: "ㄇㄛ" },
+      { pinyin: "me", expected: "ㄇㄜ" },
+      { pinyin: "mai", expected: "ㄇㄞ" },
+      { pinyin: "mei", expected: "ㄇㄟ" },
+      { pinyin: "mao", expected: "ㄇㄠ" },
+      { pinyin: "mou", expected: "ㄇㄡ" },
+      { pinyin: "man", expected: "ㄇㄢ" },
+      { pinyin: "men", expected: "ㄇㄣ" },
+      { pinyin: "mang", expected: "ㄇㄤ" },
+      { pinyin: "meng", expected: "ㄇㄥ" },
+      { pinyin: "mi", expected: "ㄇㄧ" },
+      { pinyin: "mie", expected: "ㄇㄧㄝ" },
+      { pinyin: "miao", expected: "ㄇㄧㄠ" },
+      { pinyin: "miu", expected: "ㄇㄧㄡ" },
+      { pinyin: "mian", expected: "ㄇㄧㄢ" },
+      { pinyin: "min", expected: "ㄇㄧㄣ" },
+      { pinyin: "ming", expected: "ㄇㄧㄥ" },
+      { pinyin: "mu", expected: "ㄇㄨ" },
+
+      { pinyin: "fa", expected: "ㄈㄚ" },
+      { pinyin: "fo", expected: "ㄈㄛ" },
+      { pinyin: "fei", expected: "ㄈㄟ" },
+      { pinyin: "fou", expected: "ㄈㄡ" },
+      { pinyin: "fan", expected: "ㄈㄢ" },
+      { pinyin: "fen", expected: "ㄈㄣ" },
+      { pinyin: "fang", expected: "ㄈㄤ" },
+      { pinyin: "feng", expected: "ㄈㄥ" },
+      { pinyin: "fu", expected: "ㄈㄨ" },
+
+      { pinyin: "da", expected: "ㄉㄚ" },
+      { pinyin: "de", expected: "ㄉㄜ" },
+      { pinyin: "dai", expected: "ㄉㄞ" },
+      { pinyin: "dei", expected: "ㄉㄟ" },
+      { pinyin: "dao", expected: "ㄉㄠ" },
+      { pinyin: "dou", expected: "ㄉㄡ" },
+      { pinyin: "dan", expected: "ㄉㄢ" },
+      { pinyin: "dang", expected: "ㄉㄤ" },
+      { pinyin: "deng", expected: "ㄉㄥ" },
+      { pinyin: "di", expected: "ㄉㄧ" },
+      { pinyin: "die", expected: "ㄉㄧㄝ" },
+      { pinyin: "diao", expected: "ㄉㄧㄠ" },
+      { pinyin: "diu", expected: "ㄉㄧㄡ" },
+      { pinyin: "dian", expected: "ㄉㄧㄢ" },
+      { pinyin: "ding", expected: "ㄉㄧㄥ" },
+      { pinyin: "du", expected: "ㄉㄨ" },
+      { pinyin: "duo", expected: "ㄉㄨㄛ" },
+      { pinyin: "dui", expected: "ㄉㄨㄟ" },
+      { pinyin: "duan", expected: "ㄉㄨㄢ" },
+      { pinyin: "dun", expected: "ㄉㄨㄣ" },
+      { pinyin: "dong", expected: "ㄉㄨㄥ" },
+
+      { pinyin: "ta", expected: "ㄊㄚ" },
+      { pinyin: "te", expected: "ㄊㄜ" },
+      { pinyin: "tai", expected: "ㄊㄞ" },
+      { pinyin: "tao", expected: "ㄊㄠ" },
+      { pinyin: "tou", expected: "ㄊㄡ" },
+      { pinyin: "tan", expected: "ㄊㄢ" },
+      { pinyin: "tang", expected: "ㄊㄤ" },
+      { pinyin: "teng", expected: "ㄊㄥ" },
+      { pinyin: "ti", expected: "ㄊㄧ" },
+      { pinyin: "tie", expected: "ㄊㄧㄝ" },
+      { pinyin: "tiao", expected: "ㄊㄧㄠ" },
+      { pinyin: "tian", expected: "ㄊㄧㄢ" },
+      { pinyin: "ting", expected: "ㄊㄧㄥ" },
+      { pinyin: "tu", expected: "ㄊㄨ" },
+      { pinyin: "tuo", expected: "ㄊㄨㄛ" },
+      { pinyin: "tui", expected: "ㄊㄨㄟ" },
+      { pinyin: "tuan", expected: "ㄊㄨㄢ" },
+      { pinyin: "tun", expected: "ㄊㄨㄣ" },
+      { pinyin: "tong", expected: "ㄊㄨㄥ" },
+
+      { pinyin: "na", expected: "ㄋㄚ" },
+      { pinyin: "ne", expected: "ㄋㄜ" },
+      { pinyin: "nai", expected: "ㄋㄞ" },
+      { pinyin: "nei", expected: "ㄋㄟ" },
+      { pinyin: "nao", expected: "ㄋㄠ" },
+      { pinyin: "nou", expected: "ㄋㄡ" },
+      { pinyin: "nan", expected: "ㄋㄢ" },
+      { pinyin: "nen", expected: "ㄋㄣ" },
+      { pinyin: "nang", expected: "ㄋㄤ" },
+      { pinyin: "neng", expected: "ㄋㄥ" },
+      { pinyin: "ni", expected: "ㄋㄧ" },
+      { pinyin: "nia", expected: "ㄋㄧㄚ" },
+      { pinyin: "nie", expected: "ㄋㄧㄝ" },
+      { pinyin: "niao", expected: "ㄋㄧㄠ" },
+      { pinyin: "niu", expected: "ㄋㄧㄡ" },
+      { pinyin: "nian", expected: "ㄋㄧㄢ" },
+      { pinyin: "nin", expected: "ㄋㄧㄣ" },
+      { pinyin: "niang", expected: "ㄋㄧㄤ" },
+      { pinyin: "ning", expected: "ㄋㄧㄥ" },
+      { pinyin: "nu", expected: "ㄋㄨ" },
+      { pinyin: "nuo", expected: "ㄋㄨㄛ" },
+      { pinyin: "nuan", expected: "ㄋㄨㄢ" },
+      { pinyin: "nun", expected: "ㄋㄨㄣ" },
+      { pinyin: "nong", expected: "ㄋㄨㄥ" },
+      { pinyin: "nü", expected: "ㄋㄩ" },
+      { pinyin: "nüe", expected: "ㄋㄩㄝ" },
+
+      { pinyin: "la", expected: "ㄌㄚ" },
+      { pinyin: "lo", expected: "ㄌㄛ" },
+      { pinyin: "le", expected: "ㄌㄜ" },
+      { pinyin: "lai", expected: "ㄌㄞ" },
+      { pinyin: "lei", expected: "ㄌㄟ" },
+      { pinyin: "lao", expected: "ㄌㄠ" },
+      { pinyin: "lou", expected: "ㄌㄡ" },
+      { pinyin: "lan", expected: "ㄌㄢ" },
+      { pinyin: "lang", expected: "ㄌㄤ" },
+      { pinyin: "leng", expected: "ㄌㄥ" },
+      { pinyin: "li", expected: "ㄌㄧ" },
+      { pinyin: "lia", expected: "ㄌㄧㄚ" },
+      { pinyin: "lie", expected: "ㄌㄧㄝ" },
+      { pinyin: "liao", expected: "ㄌㄧㄠ" },
+      { pinyin: "liu", expected: "ㄌㄧㄡ" },
+      { pinyin: "lian", expected: "ㄌㄧㄢ" },
+      { pinyin: "lin", expected: "ㄌㄧㄣ" },
+      { pinyin: "liang", expected: "ㄌㄧㄤ" },
+      { pinyin: "ling", expected: "ㄌㄧㄥ" },
+      { pinyin: "lu", expected: "ㄌㄨ" },
+      { pinyin: "luo", expected: "ㄌㄨㄛ" },
+      { pinyin: "luan", expected: "ㄌㄨㄢ" },
+      { pinyin: "lun", expected: "ㄌㄨㄣ" },
+      { pinyin: "long", expected: "ㄌㄨㄥ" },
+      { pinyin: "lü", expected: "ㄌㄩ" },
+      { pinyin: "lüe", expected: "ㄌㄩㄝ" },
+
+      { pinyin: "ga", expected: "ㄍㄚ" },
+      { pinyin: "ge", expected: "ㄍㄜ" },
+      { pinyin: "gai", expected: "ㄍㄞ" },
+      { pinyin: "gei", expected: "ㄍㄟ" },
+      { pinyin: "gao", expected: "ㄍㄠ" },
+      { pinyin: "gou", expected: "ㄍㄡ" },
+      { pinyin: "gan", expected: "ㄍㄢ" },
+      { pinyin: "gen", expected: "ㄍㄣ" },
+      { pinyin: "gang", expected: "ㄍㄤ" },
+      { pinyin: "geng", expected: "ㄍㄥ" },
+      { pinyin: "gu", expected: "ㄍㄨ" },
+      { pinyin: "gua", expected: "ㄍㄨㄚ" },
+      { pinyin: "guo", expected: "ㄍㄨㄛ" },
+      { pinyin: "guai", expected: "ㄍㄨㄞ" },
+      { pinyin: "gui", expected: "ㄍㄨㄟ" },
+      { pinyin: "guan", expected: "ㄍㄨㄢ" },
+      { pinyin: "gun", expected: "ㄍㄨㄣ" },
+      { pinyin: "guang", expected: "ㄍㄨㄤ" },
+      { pinyin: "gong", expected: "ㄍㄨㄥ" },
+
+      { pinyin: "ka", expected: "ㄎㄚ" },
+      { pinyin: "ke", expected: "ㄎㄜ" },
+      { pinyin: "kai", expected: "ㄎㄞ" },
+      { pinyin: "kao", expected: "ㄎㄠ" },
+      { pinyin: "kou", expected: "ㄎㄡ" },
+      { pinyin: "kan", expected: "ㄎㄢ" },
+      { pinyin: "ken", expected: "ㄎㄣ" },
+      { pinyin: "kang", expected: "ㄎㄤ" },
+      { pinyin: "keng", expected: "ㄎㄥ" },
+      { pinyin: "ku", expected: "ㄎㄨ" },
+      { pinyin: "kua", expected: "ㄎㄨㄚ" },
+      { pinyin: "kuo", expected: "ㄎㄨㄛ" },
+      { pinyin: "kuai", expected: "ㄎㄨㄞ" },
+      { pinyin: "kui", expected: "ㄎㄨㄟ" },
+      { pinyin: "kuan", expected: "ㄎㄨㄢ" },
+      { pinyin: "kun", expected: "ㄎㄨㄣ" },
+      { pinyin: "kuang", expected: "ㄎㄨㄤ" },
+      { pinyin: "kong", expected: "ㄎㄨㄥ" },
+
+      { pinyin: "ha", expected: "ㄏㄚ" },
+      { pinyin: "he", expected: "ㄏㄜ" },
+      { pinyin: "hai", expected: "ㄏㄞ" },
+      { pinyin: "hei", expected: "ㄏㄟ" },
+
+      { pinyin: "yi", expected: "ㄧ" },
+      { pinyin: "ye", expected: "ㄧㄝ" },
+      { pinyin: "lu", expected: "ㄌㄨ" },
+      { pinyin: "shui", expected: "ㄕㄨㄟ" },
+      { pinyin: "ni", expected: "ㄋㄧ" },
+      { pinyin: "hao", expected: "ㄏㄠ" },
+      { pinyin: "zhong", expected: "ㄓㄨㄥ" },
+      { pinyin: "guo", expected: "ㄍㄨㄛ" },
+      { pinyin: "ren", expected: "ㄖㄣ" },
+      { pinyin: "ju", expected: "ㄐㄩ" },
+      { pinyin: "qu", expected: "ㄑㄩ" },
+      { pinyin: "xu", expected: "ㄒㄩ" }
+    ];
+
+    // Run the tests and render the table
+    function runTests() {
+      const tbody = document.querySelector('#testTable tbody');
+      tbody.innerHTML = '';
+
+      testData.forEach(item => {
+        const inputWithTone = item.pinyin + '1';
+        const computed = numbersToZhuyin(inputWithTone);
+        const status = computed === item.expected 
+          ? '<span class="match">✓ PASS</span>' 
+          : '<span class="fail">✗ FAIL</span>';
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td><code>${inputWithTone}</code></td>
+          <td><code>${item.expected}</code></td>
+          <td><code>${computed}</code></td>
+          <td>${status}</td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      console.log('%c✅ All pinyin.info basic chart tests completed!', 'color: green; font-size: 16px;');
+      console.table(testData.map(item => ({
+        pinyinInput: item.pinyin + '1',
+        expected: item.expected,
+        computed: pinyinToZhuyin(item.pinyin + '1'),
+        pass: pinyinToZhuyin(item.pinyin + '1') === item.expected
+      })));
+    }
+
+    // Auto-run when page loads
+    window.onload = runTests;
+  </script>
+</body>
+</html>
