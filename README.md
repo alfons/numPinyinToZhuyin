@@ -1,6 +1,6 @@
 # numPinyinToZhuyin
 
-A tiny utility for converting numbered **Hànyǔ Pīnyīn** (e.g. `fei1 chang2`) into **Zhuyin / Bopomofo** with tone marks.
+A tiny utility for converting numbered **Hànyǔ Pīnyīn** (e.g. `Han4 Yu3 Pin1 Yin1`) into **Zhuyin / Bopomofo** with tone marks.
 
 ## Overview
 
