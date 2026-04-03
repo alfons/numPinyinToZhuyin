@@ -2,7 +2,7 @@
  * Number-marked Pinyin → Zhuyin (performance-tuned)
  */
 const numPinyinToZhuyin = (function () {
-    // ────── Constants (created only ONCE) ──────
+    // ────── Constants ──────
     const initialMap = {
         'zh': 'ㄓ', 'ch': 'ㄔ', 'sh': 'ㄕ', 'r': 'ㄖ',
         'z': 'ㄗ', 'c': 'ㄘ', 's': 'ㄙ',
