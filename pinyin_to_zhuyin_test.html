@@ -6,17 +6,26 @@
   <style>
     body { font-family: system-ui, sans-serif; margin: 20px; }
     table { border-collapse: collapse; width: 100%; max-width: 1200px; }
-    th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; }
+    th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; vertical-align: top; }
     th { background: #f0f0f0; }
     .match { color: green; font-weight: bold; }
     .fail { color: red; font-weight: bold; }
+    .variants { font-size: 0.9em; line-height: 1.4; }
   </style>
 </head>
 <body>
-  <h1>Pinyin → Zhuyin Test</h1>
-  <p>Tests based on the official <strong>basic chart</strong> from <a href="https://pinyin.info/romanization/bopomofo/basic.html" target="_blank">pinyin.info</a>.<br>
-     All tests use tone 1 (no tone mark in Zhuyin) to match the tone-less chart on the site.</p>
-
+<h1>Pinyin → Zhuyin Test Suite</h1>
+  <p>
+    <strong>numPinyinToZhuyin</strong> — A tiny, performance-optimised JavaScript function to convert 
+    number-marked Hànyǔ Pīnyīn to Zhuyin (Bopomofo) with tone marks<br>
+    by Alfons Grabher (<a href="https://github.com/alfons/numPinyinToZhuyin" target="_blank" style="text-decoration: none;">MIT License</a> 
+    • <a href="https://github.com/alfons/numPinyinToZhuyin" target="_blank">github.com/alfons/numPinyinToZhuyin</a>)
+  </p>
+  <p>
+    Tests based on the official basic chart from 
+    <a href="https://pinyin.info/romanization/bopomofo/basic.html" target="_blank">pinyin.info</a>.
+    All tests use tone 1 (no tone mark in Zhuyin) to match the tone-less chart on the site.
+  </p>
   <h2>Test Results</h2>
   <table id="testTable">
     <thead>
@@ -25,11 +34,13 @@
         <th>Expected Zhuyin (from pinyin.info)</th>
         <th>Computed Zhuyin</th>
         <th>Status</th>
+        <th>All Tone Variants</th>
       </tr>
     </thead>
     <tbody></tbody>
   </table>
-        <script src="./pinyin_to_zhuyin.js"></script>
+
+  <script src="./pinyin_to_zhuyin.js"></script>
 
   <script>
     // ==================== TEST DATA FROM https://pinyin.info/romanization/bopomofo/basic.html ====================
@@ -265,12 +276,31 @@
           ? '<span class="match">✓ PASS</span>' 
           : '<span class="fail">✗ FAIL</span>';
 
+        // === NEW: Generate all tone variants (1–5 + bare pinyin) ===
+        const basePinyin = item.pinyin;
+        const variantList = [];
+
+        // Numbered tones 1–5
+        for (let t = 1; t <= 5; t++) {
+          const p = basePinyin + t;
+          const z = numPinyinToZhuyin(p);
+          variantList.push(`${p} (${z})`);
+        }
+
+        // Bare pinyin (no number) – treated as tone 1 by the converter
+        const noToneP = basePinyin;
+        const noToneZ = numPinyinToZhuyin(noToneP);
+        variantList.push(`${noToneP} (${noToneZ})`);
+
+        const variantsHtml = variantList.join(', ');
+
         const row = document.createElement('tr');
         row.innerHTML = `
           <td><code>${inputWithTone}</code></td>
           <td><code>${item.expected}</code></td>
           <td><code>${computed}</code></td>
           <td>${status}</td>
+          <td><code class="variants">${variantsHtml}</code></td>
         `;
         tbody.appendChild(row);
       });
