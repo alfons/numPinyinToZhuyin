@@ -4,7 +4,7 @@ A tiny, performance optimised function for converting numbered **Hànyǔ Pīnyī
 
 ## Overview
 
-This function takes space separated, tone numbered Pinyin syllables and outputs the corresponding Zhuyin symbols, as listed on https://www.pinyin.info/romanization/bopomofo/basic.html, with proper tone diacritics (leading 5th tone dot, not trailing.)
+This function takes space separated, tone numbered Pinyin syllables and outputs the corresponding Zhuyin symbols with proper tone diacritics (leading 5th tone dot, not trailing.)
 
 ## Example
 
